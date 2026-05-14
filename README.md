@@ -94,8 +94,8 @@ The first time you run it, a browser window will open asking you to log in with 
 3. Name it `Calendar Notion Sync`
 4. Set trigger to **When I log on**
 5. Set action to **Start a program**
-6. Set program to: `C:\Users\YOUR_USERNAME\programming\calendar-notion-sync\run_sync.bat`
-7. Set **Start in** to: `C:\Users\YOUR_USERNAME\programming\calendar-notion-sync`
+6. Set program to: `C:\Users\{YOUR_USERNAME}\{PATH_TO_PROJECT}\calendar-notion-sync\run_sync.bat`
+7. Set **Start in** to: `C:\Users\{YOUR_USERNAME}\{PATH_TO_PROJECT}\calendar-notion-sync`
 8. Click Finish
 
 The script will now run automatically every time you log into Windows.
