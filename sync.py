@@ -171,6 +171,8 @@ def add_to_notion(notion, clean, original_title, start_date, end_date, course_id
 def main():
     log("🔄 Syncing Google Calendar → Notion...")
 
+    #Connecting to google calendar
+
     try:
         service = get_google_calendar_service()
     except Exception as e:
@@ -183,6 +185,7 @@ def main():
         )
         return
 
+    #Connecting to notion database
     try:
         notion = Client(auth=NOTION_TOKEN)
     except Exception as e:
@@ -195,6 +198,7 @@ def main():
         )
         return
 
+    #taking info from google calendar and adding the info to notion database 
     course_map    = build_course_map(notion)
     events        = get_upcoming_events(service)
     synced_titles = get_synced_titles()
