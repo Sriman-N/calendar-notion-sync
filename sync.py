@@ -2,6 +2,8 @@ import os
 import re
 import pickle
 import logging
+import tkinter as tk
+from tkinter import messagebox
 from datetime import datetime, timezone, timedelta
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -30,6 +32,19 @@ logging.basicConfig(
 def log(msg):
     print(msg)
     logging.info(msg)
+
+def notify(title, message, kind="info"):
+    """Show a popup dialog. kind can be 'info', 'warning', or 'error'."""
+    root = tk.Tk()
+    root.withdraw()  # Hide the empty root window
+    root.attributes("-topmost", True)  # Make sure it appears on top
+    if kind == "error":
+        messagebox.showerror(title, message)
+    elif kind == "warning":
+        messagebox.showwarning(title, message)
+    else:
+        messagebox.showinfo(title, message)
+    root.destroy()
 
 def get_google_calendar_service():
     creds = None
@@ -161,6 +176,11 @@ def main():
     except Exception as e:
         logging.error(f"Failed to connect to Google Calendar: {e}")
         print("❌ Could not connect to Google Calendar. Check your credentials.")
+        notify(
+            "Calendar Notion Sync — Error",
+            "Could not connect to Google Calendar.\n\nYour token may have expired.\nDelete token.pickle and re-run the script.",
+            kind="error"
+        )
         return
 
     try:
@@ -168,6 +188,11 @@ def main():
     except Exception as e:
         logging.error(f"Failed to connect to Notion: {e}")
         print("❌ Could not connect to Notion. Check your token.")
+        notify(
+            "Calendar Notion Sync — Error",
+            "Could not connect to Notion.\n\nCheck your NOTION_TOKEN in the .env file.",
+            kind="error"
+        )
         return
 
     course_map    = build_course_map(notion)
@@ -202,6 +227,17 @@ def main():
     log(f"\n✅ Done! {added} new events added to Notion.")
     if failed > 0:
         log(f"⚠️ {failed} events failed — check sync.log for details.")
+        notify(
+            "Calendar Notion Sync — Warning",
+            f"{failed} event(s) failed to sync.\n\nCheck sync.log for details.",
+            kind="warning"
+        )
+    else:
+        notify(
+            "Calendar Notion Sync — Done",
+            f"Sync complete!\n{added} new event(s) added to Notion.",
+            kind="info"
+        )
 
 if __name__ == "__main__":
     main()
