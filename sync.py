@@ -36,8 +36,8 @@ def log(msg):
 def notify(title, message, kind="info"):
     """Show a popup dialog. kind can be 'info', 'warning', or 'error'."""
     root = tk.Tk()
-    root.withdraw()  # Hide the empty root window
-    root.attributes("-topmost", True)  # Make sure it appears on top
+    root.withdraw()
+    root.attributes("-topmost", True)
     if kind == "error":
         messagebox.showerror(title, message)
     elif kind == "warning":
@@ -171,8 +171,7 @@ def add_to_notion(notion, clean, original_title, start_date, end_date, course_id
 def main():
     log("🔄 Syncing Google Calendar → Notion...")
 
-    #Connecting to google calendar
-
+    # Connecting to Google Calendar
     try:
         service = get_google_calendar_service()
     except Exception as e:
@@ -185,7 +184,7 @@ def main():
         )
         return
 
-    #Connecting to notion database
+    # Connecting to Notion database
     try:
         notion = Client(auth=NOTION_TOKEN)
     except Exception as e:
@@ -198,7 +197,7 @@ def main():
         )
         return
 
-    #taking info from google calendar and adding the info to notion database 
+    # Taking info from Google Calendar and adding to Notion database
     course_map    = build_course_map(notion)
     events        = get_upcoming_events(service)
     synced_titles = get_synced_titles()
@@ -215,8 +214,8 @@ def main():
         start_date = start.get("dateTime", start.get("date", ""))
         end_date   = end.get("dateTime",   end.get("date",   ""))
 
-        clean      = clean_title(title)
-        course_id  = get_course_id(course_map, title)
+        clean       = clean_title(title)
+        course_id   = get_course_id(course_map, title)
         description = event.get("description", "")
 
         try:
